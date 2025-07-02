@@ -54,7 +54,7 @@ npm -v
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/recipe-sharing-website.git
+git clone https://github.com/Wolfie2709/FrontEndDev_HSU.git
 cd recipe-sharing-website
 npm install
 npm run start
