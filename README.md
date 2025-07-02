@@ -1,27 +1,27 @@
-# 🍽️ Recipe Sharing Website
+# Recipe Sharing Website
 
-A full-featured **React-based Recipe Sharing Platform** that supports user authentication, recipe CRUD operations, filtering, drag-and-drop meal planning, local data storage, and more — all without a backend server.
-
----
-
-## 🚀 Features Overview
-
-- 🔐 User Authentication (login/logout)
-- 🍝 Add, Edit, Delete Recipes
-- ❤️ Favorite and ⭐ Rate Recipes
-- 💬 Comment on Recipes
-- 🧑‍🍳 User Profile Management
-- 🧩 Meal Planning (Drag-and-Drop by Day)
-- 🔍 Search, Filter & Sort Recipes
-- 🌗 Theme Toggle (Dark/Light)
-- 📦 Data persistence with `localStorage`
-- 📱 Fully Responsive (Mobile-friendly)
-- 📤 Social Media Sharing
-- 🍽️ Nutritional Info Tracking
+A full-featured React-based Recipe Sharing Platform that supports user authentication, recipe CRUD operations, filtering, drag-and-drop meal planning, local data storage, and more — all without a backend server.
 
 ---
 
-## 🧠 Architecture
+## Features Overview
+
+- User Authentication (login/logout)
+- Add, Edit, Delete Recipes
+- Favorite and Rate Recipes
+- Comment on Recipes
+- User Profile Management
+- Meal Planning (Drag-and-Drop by Day)
+- Search, Filter & Sort Recipes
+- Theme Toggle (Dark/Light)
+- Data persistence with localStorage
+- Fully Responsive Design
+- Social Media Sharing
+- Nutritional Information Tracking
+
+---
+
+## Architecture
 
 ```
 App.js (Main Container)
@@ -38,20 +38,20 @@ App.js (Main Container)
 
 ---
 
-## ⚙️ Project Setup
+## Project Setup
 
-### 🔧 Prerequisites
+### Prerequisites
 
-- [Visual Studio Code](https://code.visualstudio.com/)
-- [Node.js v18+](https://nodejs.org/en)
+- Visual Studio Code: https://code.visualstudio.com/
+- Node.js v18 or higher: https://nodejs.org/en
 
-Check your versions:
+To check versions:
 ```bash
 node -v
 npm -v
 ```
 
-### 📦 Installation
+### Installation
 
 ```bash
 git clone https://github.com/your-username/recipe-sharing-website.git
@@ -60,16 +60,17 @@ npm install
 npm run start
 ```
 
-Then go to: [http://localhost:3000](http://localhost:3000)
+Open http://localhost:3000 in your browser.
 
 ---
 
-## 🧪 Mock API Setup (`services/api.js`)
+## Mock API Setup (services/api.js)
 
-All data interactions are mocked using `localStorage`. APIs are simulated with delay and CRUD support:
+All data interactions are mocked using localStorage. APIs are simulated with delay and CRUD support.
 
 ### Recipe API
-```js
+
+```javascript
 recipeAPI.getAll()
 recipeAPI.getById(id)
 recipeAPI.create(recipe)
@@ -78,25 +79,27 @@ recipeAPI.delete(id)
 ```
 
 ### User API
-```js
+
+```javascript
 userAPI.getAll()
 userAPI.login(email, password)
 userAPI.create(user)
 ```
 
-### Comment & Rating API
-```js
+### Comment and Rating API
+
+```javascript
 commentAPI.create(comment)
 ratingAPI.rate(recipeId, score)
 ```
 
 ---
 
-## 🧭 Core Functionality
+## Core Functionality
 
-### 🔐 Authentication
+### Authentication
 
-```js
+```javascript
 const handleLogin = (email, password) => {
   const user = users.find(u => u.email === email && u.password === password)
   if (user) {
@@ -106,9 +109,9 @@ const handleLogin = (email, password) => {
 }
 ```
 
-### 🍳 Adding a Recipe
+### Adding a Recipe
 
-```js
+```javascript
 const handleAddRecipe = (recipeData) => {
   const newRecipe = {
     ...recipeData,
@@ -116,15 +119,15 @@ const handleAddRecipe = (recipeData) => {
     author: currentUser.username,
     createdAt: new Date().toISOString(),
     rating: 0,
-    favorites: 0,
+    favorites: 0
   }
   setRecipes([...recipes, newRecipe])
 }
 ```
 
-### 🔎 Filtering
+### Filtering
 
-```js
+```javascript
 const filteredRecipes = recipes.filter(recipe =>
   recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
   (selectedCategory === "All" || recipe.category === selectedCategory)
@@ -133,13 +136,12 @@ const filteredRecipes = recipes.filter(recipe =>
 
 ---
 
-## 🗓️ Meal Planner (Drag-and-Drop)
+## Meal Planner (Drag-and-Drop)
 
-```js
+```javascript
 const mealPlan = {
   Monday: [1, 2],
-  Tuesday: [3],
-  ...
+  Tuesday: [3]
 }
 
 const handleDragStart = (e, recipeId) => {
@@ -154,19 +156,19 @@ const handleDrop = (e, day) => {
 
 ---
 
-## 🧑‍💻 Component Highlights
+## Component Highlights
 
-- `RecipeCard`: Shows individual recipe info with favorite, rate, comment actions
-- `RecipeForm`: Add/Edit recipe form with validation
-- `RecipeList`: Grid layout of recipes with filters
-- `MealPlanner`: Weekly planner with drag-and-drop
-- `ThemeToggle`: Switch between light and dark mode
+- `RecipeCard`: Displays recipe information with favorite, rate, and comment options
+- `RecipeForm`: Form for adding or editing recipes with validation
+- `RecipeList`: Displays a list of recipes with filters and sorting
+- `MealPlanner`: Weekly meal planning interface with drag-and-drop
+- `ThemeToggle`: Light and dark mode toggle switch
 
 ---
 
-## 🌓 Dark Mode Support
+## Dark Mode Support
 
-```js
+```javascript
 useEffect(() => {
   document.body.className = darkMode ? "dark-mode" : ""
 }, [darkMode])
@@ -174,10 +176,11 @@ useEffect(() => {
 
 ---
 
-## 📊 Sample Data Structures
+## Sample Data Structures
 
 ### Recipe Object
-```js
+
+```javascript
 {
   id: 1,
   title: "Spaghetti Bolognese",
@@ -199,7 +202,8 @@ useEffect(() => {
 ```
 
 ### User Object
-```js
+
+```javascript
 {
   id: 1,
   username: "john_doe",
@@ -211,16 +215,16 @@ useEffect(() => {
 
 ---
 
-## 🧹 Future Improvements
+## Future Improvements
 
-- ✅ Backend integration (e.g., Firebase or Express API)
-- ✅ Social login (Google/GitHub)
-- ✅ Real-time comments or chat
-- ✅ PWA support for mobile app
-- ✅ Image upload & cloud storage
+- Backend integration (e.g., Firebase or Express API)
+- Social login (Google, GitHub)
+- Real-time comments or chat
+- PWA support for mobile usage
+- Image upload and cloud storage
 
 ---
 
-## 📄 License
+## License
 
-MIT License. Free to use and modify.
+MIT License. You are free to use, modify, and distribute this project.
