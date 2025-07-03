@@ -287,6 +287,8 @@ function App() {
         carbs: 0,
       },
       comments: [],
+      ratings: [],
+      rating: 0,
     }
 
     setRecipes([...recipes, newRecipe])
@@ -294,14 +296,15 @@ function App() {
   }
 
   const handleUpdateRecipe = (updatedRecipe) => {
-    setRecipes(recipes.map((recipe) => (recipe.id === updatedRecipe.id ? updatedRecipe : recipe)))
-
-    // Update current user's favorites if needed
-    if (updatedRecipe.favorites !== undefined) {
-      const updatedUser = { ...currentUser }
-      localStorage.setItem("currentUser", JSON.stringify(updatedUser))
-    }
+    setRecipes((prev) =>
+      prev.map((recipe) =>
+        recipe.id === updatedRecipe.id
+          ? { ...recipe, ...updatedRecipe }
+          : recipe
+      )
+    )
   }
+
 
   const handleDeleteRecipe = (recipeId) => {
     setRecipes(recipes.filter((recipe) => recipe.id !== recipeId))
@@ -353,6 +356,12 @@ function App() {
   const getFavoriteRecipes = () => {
     return recipes.filter((recipe) => currentUser.favorites.includes(recipe.id))
   }
+
+  const handleUpdateCurrentUser = (updatedUser) => {
+    setCurrentUser(updatedUser)
+    localStorage.setItem("currentUser", JSON.stringify(updatedUser))
+  }
+
 
   // Retry function for error handling
   const handleRetry = () => {
@@ -417,6 +426,7 @@ function App() {
               onUpdateRecipe={handleUpdateRecipe}
               onDeleteRecipe={handleDeleteRecipe}
               onEditRecipe={handleEditRecipe}
+              onUpdateCurrentUser={handleUpdateCurrentUser}
             />
           </>
         )}

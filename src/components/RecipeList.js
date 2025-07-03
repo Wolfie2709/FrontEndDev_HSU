@@ -3,34 +3,19 @@
 import { useState } from "react"
 import RecipeCard from "./RecipeCard"
 
-function RecipeList({ recipes, currentUser, onUpdateRecipe, onDeleteRecipe, onEditRecipe }) {
+function RecipeList({ recipes, currentUser, onUpdateRecipe, onDeleteRecipe, onEditRecipe, onUpdateCurrentUser }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [sortOption, setSortOption] = useState("newest")
   const [cookingTimeFilter, setCookingTimeFilter] = useState("All")
   const [servingsFilter, setServingsFilter] = useState("All")
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value)
-  }
+  const handleSearch = (e) => setSearchTerm(e.target.value)
+  const handleCategoryChange = (e) => setSelectedCategory(e.target.value)
+  const handleSortChange = (e) => setSortOption(e.target.value)
+  const handleCookingTimeChange = (e) => setCookingTimeFilter(e.target.value)
+  const handleServingsChange = (e) => setServingsFilter(e.target.value)
 
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value)
-  }
-
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value)
-  }
-
-  const handleCookingTimeChange = (e) => {
-    setCookingTimeFilter(e.target.value)
-  }
-
-  const handleServingsChange = (e) => {
-    setServingsFilter(e.target.value)
-  }
-
-  // Filter recipes
   const filteredRecipes = recipes.filter((recipe) => {
     const searchMatch =
       recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -54,7 +39,6 @@ function RecipeList({ recipes, currentUser, onUpdateRecipe, onDeleteRecipe, onEd
     return searchMatch && categoryMatch && cookingTimeMatch && servingsMatch
   })
 
-  // Sort recipes
   const sortedRecipes = [...filteredRecipes].sort((a, b) => {
     switch (sortOption) {
       case "newest":
@@ -138,6 +122,7 @@ function RecipeList({ recipes, currentUser, onUpdateRecipe, onDeleteRecipe, onEd
               onUpdateRecipe={onUpdateRecipe}
               onDeleteRecipe={onDeleteRecipe}
               onEditRecipe={onEditRecipe}
+              onUpdateCurrentUser={onUpdateCurrentUser} // ✅ đã thêm dòng này
             />
           ))
         )}

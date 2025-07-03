@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ShareButtons from "./ShareButtons"
 
 function RecipeCard({ recipe, currentUser, onUpdateRecipe, onDeleteRecipe, onEditRecipe }) {
@@ -12,31 +12,62 @@ function RecipeCard({ recipe, currentUser, onUpdateRecipe, onDeleteRecipe, onEdi
   const isFavorited = currentUser.favorites.includes(recipe.id)
   const isOwner = recipe.authorId === currentUser.id
 
-  const handleFavoriteToggle = () => {
-    const updatedRecipe = { ...recipe }
-    const updatedUser = { ...currentUser }
+  // Load user's existing rating (nếu có)
+  useEffect(() => {
+    if (recipe.ratings) {
+      const existing = recipe.ratings.find((r) => r.userId === currentUser.id)
+      setUserRating(existing?.value || 0)
+    }
+  }, [recipe, currentUser])
 
-    if (isFavorited) {
-      updatedRecipe.favorites = Math.max(0, updatedRecipe.favorites - 1)
-      updatedUser.favorites = updatedUser.favorites.filter((id) => id !== recipe.id)
-    } else {
-      updatedRecipe.favorites = updatedRecipe.favorites + 1
-      updatedUser.favorites = [...updatedUser.favorites, recipe.id]
+  const handleFavoriteToggle = () => {
+    const isFavorited = currentUser.favorites.includes(recipe.id)
+    const updatedUser = {
+      ...currentUser,
+      favorites: isFavorited
+        ? currentUser.favorites.filter((id) => id !== recipe.id)
+        : [...currentUser.favorites, recipe.id],
     }
 
-    // Update localStorage for current user
-    localStorage.setItem("currentUser", JSON.stringify(updatedUser))
-
-    onUpdateRecipe(updatedRecipe)
-  }
-
-  const handleRatingChange = (rating) => {
-    setUserRating(rating)
-    // Here you would typically save the rating to your data store
     const updatedRecipe = {
       ...recipe,
-      rating: ((recipe.rating * 10 + rating) / 11).toFixed(1), // Simple average calculation
+      favorites: isFavorited
+        ? Math.max(0, (recipe.favorites || 1) - 1)
+        : (recipe.favorites || 0) + 1,
     }
+
+    // Lưu currentUser vào localStorage
+    localStorage.setItem("currentUser", JSON.stringify(updatedUser))
+
+    // Gửi dữ liệu lên cha để cập nhật cả recipe & user
+    onUpdateRecipe(updatedRecipe)
+
+    // Nếu bạn có onUpdateCurrentUser thì gọi luôn:
+    // onUpdateCurrentUser?.(updatedUser)
+  }
+
+
+  const handleRatingChange = (newRating) => {
+    setUserRating(newRating)
+
+    let updatedRatings = [...(recipe.ratings || [])]
+    const existingIndex = updatedRatings.findIndex((r) => r.userId === currentUser.id)
+
+    if (existingIndex !== -1) {
+      updatedRatings[existingIndex].value = newRating
+    } else {
+      updatedRatings.push({ userId: currentUser.id, value: newRating })
+    }
+
+    const total = updatedRatings.reduce((sum, r) => sum + r.value, 0)
+    const avg = total / updatedRatings.length
+
+    const updatedRecipe = {
+      ...recipe,
+      ratings: updatedRatings,
+      rating: parseFloat(avg.toFixed(1)),
+    }
+
     onUpdateRecipe(updatedRecipe)
   }
 
@@ -105,7 +136,7 @@ function RecipeCard({ recipe, currentUser, onUpdateRecipe, onDeleteRecipe, onEdi
         <span className="category-badge">{recipe.category}</span>
         <span className="cooking-time">⏱️ {recipe.cookingTime} min</span>
         <span className="servings">👥 {recipe.servings} servings</span>
-        <span className="rating">⭐ {recipe.rating}</span>
+        <span className="rating">⭐ {recipe.rating} ({recipe.ratings?.length || 0})</span>
       </div>
 
       <p className="recipe-description">{recipe.description}</p>
